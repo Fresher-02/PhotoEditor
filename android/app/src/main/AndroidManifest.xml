@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.app1">
+    <uses-permission android:name="android.permission.CAMERA" />
    <application
         android:label="app1"
         android:icon="@mipmap/ic_launcher">
