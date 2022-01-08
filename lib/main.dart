@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
         ],
         androidUiSettings: AndroidUiSettings(
             toolbarTitle: 'Cropper',
-            toolbarColor: Colors.deepOrange,
+            toolbarColor: Colors.deepPurple,
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: false),
@@ -76,11 +76,15 @@ class _MyAppState extends State<MyApp> {
       context,
       new MaterialPageRoute(
         builder: (context) => new PhotoFilterSelector(
-          title: Text("Photo Filter Example"),
+          appBarColor: Colors.deepPurple,
+          title: Text("Photo Filter"),
           image: image!,
           filters: presetFiltersList,
           filename: fileName,
-          loader: Center(child: CircularProgressIndicator()),
+          loader: Center(
+              child: CircularProgressIndicator(
+            color: Colors.purple,
+          )),
           fit: BoxFit.contain,
         ),
       ),
@@ -108,6 +112,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.deepPurple,
         leading: IconButton(
           onPressed: null,
           icon: Icon(Icons.ac_unit),
@@ -140,31 +145,75 @@ class _MyAppState extends State<MyApp> {
       ),
       body: Center(
         child: _photo != null
-            ? Image.file(
-                _photo!,
-                width: 400.0,
-                height: 400.0,
-                fit: BoxFit.fitHeight,
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.file(
+                  _photo!,
+                ),
               )
             : Container(
-                child: Text("not selected"),
+                child: Text("Image not selected"),
               ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.purple,
         child: Text("save"),
         onPressed: () {
           if (_photo != null) {
             saveImagee(_photo!);
+            final snackBar = SnackBar(
+              content: Row(
+                children: [
+                  Icon(
+                    Icons.thumb_up,
+                    color: Colors.white,
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Expanded(child: Text("Image is saved in gallery"))
+                ],
+              ),
+              duration: Duration(milliseconds: 1000),
+              elevation: 6.0,
+              behavior: SnackBarBehavior.floating,
+            );
+
+            // Find the ScaffoldMessenger in the widget tree
+            // and use it to show a SnackBar.
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
           }
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.deepPurple,
+        selectedItemColor: Colors.black,
         items: [
           BottomNavigationBarItem(
             icon: IconButton(
                 onPressed: () {
                   if (imagee != null) {
                     cropImage();
+                  } else {
+                    final snackBar2 = SnackBar(
+                      content: Row(
+                        children: [
+                          Icon(
+                            Icons.thumb_down,
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Expanded(
+                              child: Text("Please select image before editing"))
+                        ],
+                      ),
+                      duration: Duration(milliseconds: 1000),
+                      elevation: 6.0,
+                      behavior: SnackBarBehavior.floating,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar2);
                   }
                 },
                 icon: Icon(Icons.crop)),
@@ -176,6 +225,26 @@ class _MyAppState extends State<MyApp> {
                 onPressed: () {
                   if (imagee != null) {
                     filterImage(context);
+                  } else {
+                    final snackBar2 = SnackBar(
+                      content: Row(
+                        children: [
+                          Icon(
+                            Icons.thumb_down,
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Expanded(
+                              child: Text("Please select image before editing"))
+                        ],
+                      ),
+                      duration: Duration(milliseconds: 500),
+                      elevation: 10.0,
+                      behavior: SnackBarBehavior.floating,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar2);
                   }
                 },
                 icon: Icon(Icons.photo_filter_sharp)),
